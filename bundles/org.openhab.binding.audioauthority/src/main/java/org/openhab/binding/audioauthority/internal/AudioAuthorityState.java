@@ -1,6 +1,22 @@
+/**
+ * Copyright (c) 2010-2022 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ *
+ *
+ */
 package org.openhab.binding.audioauthority.internal;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
@@ -8,6 +24,11 @@ import org.openhab.core.library.types.PercentType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.types.State;
 
+/**
+ *
+ * @author Dennis Drapeau - Initial contribution
+ *
+ */
 public class AudioAuthorityState {
 
     // Zones
@@ -143,7 +164,6 @@ public class AudioAuthorityState {
 
     public AudioAuthorityState(AudioAuthorityStateChangedListener handler) {
         this.handler = handler;
-
     }
 
     public void connectionError(String errorMessage) {
@@ -390,7 +410,10 @@ public class AudioAuthorityState {
     }
 
     public void setZone1Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone1Volume)) {
             this.zone1Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE1_VOLUME, this.zone1Volume);
@@ -417,8 +440,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone1Input(String zone1Input) {
-        StringType newVal = StringType.valueOf(zone1Input);
+    public void setZone1Input(BigDecimal zone1Input) {
+        DecimalType newVal = DecimalType.valueOf(zone1Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone1Input)) {
             this.zone1Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE1_INPUT, this.zone1Input);
@@ -442,13 +496,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone2Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone2Volume)) {
             this.zone2Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE2_VOLUME, this.zone2Volume);
             // update the volume in dB too
-            this.zone2VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone2VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE2_VOLUME_DB, this.zone2VolumeDB);
         }
     }
@@ -469,8 +524,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone2Input(String zone2Input) {
-        StringType newVal = StringType.valueOf(zone2Input);
+    public void setZone2Input(BigDecimal zone2Input) {
+        DecimalType newVal = DecimalType.valueOf(zone2Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone2Input)) {
             this.zone2Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE2_INPUT, this.zone2Input);
@@ -494,13 +580,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone3Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone3Volume)) {
             this.zone3Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE3_VOLUME, this.zone3Volume);
             // update the volume in dB too
-            this.zone3VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone3VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE3_VOLUME_DB, this.zone3VolumeDB);
         }
     }
@@ -521,8 +608,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone3Input(String zone3Input) {
-        StringType newVal = StringType.valueOf(zone3Input);
+    public void setZone3Input(BigDecimal zone3Input) {
+        DecimalType newVal = DecimalType.valueOf(zone3Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone3Input)) {
             this.zone3Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE3_INPUT, this.zone3Input);
@@ -546,13 +664,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone4Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone4Volume)) {
             this.zone4Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE4_VOLUME, this.zone4Volume);
             // update the volume in dB too
-            this.zone4VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone4VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE4_VOLUME_DB, this.zone4VolumeDB);
         }
     }
@@ -573,8 +692,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone4Input(String zone4Input) {
-        StringType newVal = StringType.valueOf(zone4Input);
+    public void setZone4Input(BigDecimal zone4Input) {
+        DecimalType newVal = DecimalType.valueOf(zone4Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone4Input)) {
             this.zone4Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE4_INPUT, this.zone4Input);
@@ -598,13 +748,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone5Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone5Volume)) {
             this.zone5Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE5_VOLUME, this.zone5Volume);
             // update the volume in dB too
-            this.zone5VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone5VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE5_VOLUME_DB, this.zone5VolumeDB);
         }
     }
@@ -625,8 +776,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone5Input(String zone5Input) {
-        StringType newVal = StringType.valueOf(zone5Input);
+    public void setZone5Input(BigDecimal zone5Input) {
+        DecimalType newVal = DecimalType.valueOf(zone5Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone5Input)) {
             this.zone5Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE5_INPUT, this.zone5Input);
@@ -650,13 +832,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone6Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone6Volume)) {
             this.zone6Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE6_VOLUME, this.zone6Volume);
             // update the volume in dB too
-            this.zone6VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone6VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE6_VOLUME_DB, this.zone6VolumeDB);
         }
     }
@@ -677,8 +860,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone6Input(String zone6Input) {
-        StringType newVal = StringType.valueOf(zone6Input);
+    public void setZone6Input(BigDecimal zone6Input) {
+        DecimalType newVal = DecimalType.valueOf(zone6Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone6Input)) {
             this.zone6Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE6_INPUT, this.zone6Input);
@@ -702,13 +916,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone7Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone7Volume)) {
             this.zone7Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE7_VOLUME, this.zone7Volume);
             // update the volume in dB too
-            this.zone7VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone7VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE7_VOLUME_DB, this.zone7VolumeDB);
         }
     }
@@ -729,8 +944,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone7Input(String zone7Input) {
-        StringType newVal = StringType.valueOf(zone7Input);
+    public void setZone7Input(BigDecimal zone7Input) {
+        DecimalType newVal = DecimalType.valueOf(zone7Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone7Input)) {
             this.zone7Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE7_INPUT, this.zone7Input);
@@ -754,13 +1000,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone8Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone8Volume)) {
             this.zone8Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE8_VOLUME, this.zone8Volume);
             // update the volume in dB too
-            this.zone8VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone8VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE8_VOLUME_DB, this.zone8VolumeDB);
         }
     }
@@ -781,8 +1028,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone8Input(String zone8Input) {
-        StringType newVal = StringType.valueOf(zone8Input);
+    public void setZone8Input(BigDecimal zone8Input) {
+        DecimalType newVal = DecimalType.valueOf(zone8Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone8Input)) {
             this.zone8Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE8_INPUT, this.zone8Input);
@@ -806,13 +1084,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone9Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone9Volume)) {
             this.zone9Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE9_VOLUME, this.zone9Volume);
             // update the volume in dB too
-            this.zone9VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone9VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE9_VOLUME_DB, this.zone9VolumeDB);
         }
     }
@@ -833,8 +1112,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone9Input(String zone9Input) {
-        StringType newVal = StringType.valueOf(zone9Input);
+    public void setZone9Input(BigDecimal zone9Input) {
+        DecimalType newVal = DecimalType.valueOf(zone9Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone9Input)) {
             this.zone9Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE9_INPUT, this.zone9Input);
@@ -858,13 +1168,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone10Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone10Volume)) {
             this.zone10Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE10_VOLUME, this.zone10Volume);
             // update the volume in dB too
-            this.zone10VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone10VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE10_VOLUME_DB, this.zone10VolumeDB);
         }
     }
@@ -885,8 +1196,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone10Input(String zone10Input) {
-        StringType newVal = StringType.valueOf(zone10Input);
+    public void setZone10Input(BigDecimal zone10Input) {
+        DecimalType newVal = DecimalType.valueOf(zone10Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone10Input)) {
             this.zone10Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE10_INPUT, this.zone10Input);
@@ -910,13 +1252,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone11Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone11Volume)) {
             this.zone11Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE11_VOLUME, this.zone11Volume);
             // update the volume in dB too
-            this.zone11VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone11VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE11_VOLUME_DB, this.zone11VolumeDB);
         }
     }
@@ -937,8 +1280,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone11Input(String zone11Input) {
-        StringType newVal = StringType.valueOf(zone11Input);
+    public void setZone11Input(BigDecimal zone11Input) {
+        DecimalType newVal = DecimalType.valueOf(zone11Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone11Input)) {
             this.zone11Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE11_INPUT, this.zone11Input);
@@ -962,13 +1336,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone12Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone12Volume)) {
             this.zone12Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE12_VOLUME, this.zone12Volume);
             // update the volume in dB too
-            this.zone12VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone12VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE12_VOLUME_DB, this.zone12VolumeDB);
         }
     }
@@ -989,8 +1364,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone12Input(String zone12Input) {
-        StringType newVal = StringType.valueOf(zone12Input);
+    public void setZone12Input(BigDecimal zone12Input) {
+        DecimalType newVal = DecimalType.valueOf(zone12Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone12Input)) {
             this.zone12Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE12_INPUT, this.zone12Input);
@@ -1014,14 +1420,15 @@ public class AudioAuthorityState {
     }
 
     public void setZone13Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
-        if (!newVal.equals(this.zone13Volume)) {
-            this.zone13Volume = newVal;
-            handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE13_VOLUME, this.zone13Volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
+        if (!newVal.equals(this.zone12Volume)) {
+            this.zone12Volume = newVal;
+            handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE13_VOLUME, this.zone12Volume);
             // update the volume in dB too
-            this.zone13VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
-            handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE13_VOLUME_DB, this.zone13VolumeDB);
+            this.zone12VolumeDB = DecimalType.valueOf(volume.toPlainString());
+            handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE13_VOLUME_DB, this.zone12VolumeDB);
         }
     }
 
@@ -1041,8 +1448,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone13Input(String zone13Input) {
-        StringType newVal = StringType.valueOf(zone13Input);
+    public void setZone13Input(BigDecimal zone13Input) {
+        DecimalType newVal = DecimalType.valueOf(zone13Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone13Input)) {
             this.zone13Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE13_INPUT, this.zone13Input);
@@ -1066,13 +1504,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone14Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone14Volume)) {
             this.zone14Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE14_VOLUME, this.zone14Volume);
             // update the volume in dB too
-            this.zone14VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone14VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE14_VOLUME_DB, this.zone14VolumeDB);
         }
     }
@@ -1093,8 +1532,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone14Input(String zone14Input) {
-        StringType newVal = StringType.valueOf(zone14Input);
+    public void setZone14Input(BigDecimal zone14Input) {
+        DecimalType newVal = DecimalType.valueOf(zone14Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone14Input)) {
             this.zone14Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE14_INPUT, this.zone14Input);
@@ -1118,13 +1588,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone15Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone15Volume)) {
             this.zone15Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE15_VOLUME, this.zone15Volume);
             // update the volume in dB too
-            this.zone15VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone15VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE15_VOLUME_DB, this.zone15VolumeDB);
         }
     }
@@ -1145,8 +1616,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone15Input(String zone15Input) {
-        StringType newVal = StringType.valueOf(zone15Input);
+    public void setZone15Input(BigDecimal zone15Input) {
+        DecimalType newVal = DecimalType.valueOf(zone15Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone15Input)) {
             this.zone15Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE15_INPUT, this.zone15Input);
@@ -1170,13 +1672,14 @@ public class AudioAuthorityState {
     }
 
     public void setZone16Volume(BigDecimal volume) {
-        PercentType newVal = new PercentType(volume);
+        PercentType newVal = new PercentType(volume.add(AudioAuthorityBindingConstants.DB_OFFSET)
+                .divide(AudioAuthorityBindingConstants.DB_OFFSET, 1, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100)));
         if (!newVal.equals(this.zone16Volume)) {
             this.zone16Volume = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE16_VOLUME, this.zone16Volume);
             // update the volume in dB too
-            this.zone16VolumeDB = DecimalType
-                    .valueOf(volume.subtract(AudioAuthorityBindingConstants.DB_OFFSET).toString());
+            this.zone16VolumeDB = DecimalType.valueOf(volume.toPlainString());
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE16_VOLUME_DB, this.zone16VolumeDB);
         }
     }
@@ -1197,8 +1700,39 @@ public class AudioAuthorityState {
         }
     }
 
-    public void setZone16Input(String zone16Input) {
-        StringType newVal = StringType.valueOf(zone16Input);
+    public void setZone16Input(BigDecimal zone16Input) {
+        DecimalType newVal = DecimalType.valueOf(zone16Input.toString());
+        int newInt = newVal.intValue();
+        if (newInt > 20) {
+            switch (newInt) {
+                case 21:
+                    newVal = new DecimalType(1);
+                    break;
+                case 34:
+                    newVal = new DecimalType(3);
+                    break;
+                case 56:
+                    newVal = new DecimalType(5);
+                    break;
+                case 78:
+                    newVal = new DecimalType(7);
+                    break;
+                case 910:
+                    newVal = new DecimalType(9);
+                    break;
+                case 1112:
+                    newVal = new DecimalType(11);
+                    break;
+                case 1314:
+                    newVal = new DecimalType(13);
+                    break;
+                case 1516:
+                    newVal = new DecimalType(15);
+                    break;
+            }
+
+        }
+
         if (!newVal.equals(this.zone16Input)) {
             this.zone16Input = newVal;
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE16_INPUT, this.zone16Input);
@@ -1212,5 +1746,4 @@ public class AudioAuthorityState {
             handler.stateChanged(AudioAuthorityBindingConstants.CHANNEL_ZONE16_NAME, this.zone16Name);
         }
     }
-
 }

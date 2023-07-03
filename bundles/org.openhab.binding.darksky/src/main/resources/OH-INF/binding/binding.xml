@@ -3,7 +3,12 @@
 	xmlns:binding="https://openhab.org/schemas/binding/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/binding/v1.0.0 https://openhab.org/schemas/binding-1.0.0.xsd">
 
+<<<<<<< Updated upstream:bundles/org.openhab.binding.darksky/src/main/resources/OH-INF/binding/binding.xml
 	<name>Dark Sky Binding</name>
 	<description>Dark Sky - The easiest, most advanced, weather API on the web.</description>
+=======
+	<name>AudioAuthority Binding</name>
+	<description>This is the binding for AudioAuthority Sonaflex SF16M Matrix Amplifier.</description>
+>>>>>>> Stashed changes:bundles/org.openhab.binding.audioauthority/src/main/resources/OH-INF/binding/binding.xml
 
 </binding:binding>
