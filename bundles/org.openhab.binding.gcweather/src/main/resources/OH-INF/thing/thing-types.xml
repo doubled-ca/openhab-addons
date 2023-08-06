@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="gcweather"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+
+
+
+	<thing-type id="weather">
+
+
+		<label> GC Weather Observations</label>
+		<description>Most Recent Observations from the Location</description>
+
+		<channels>
+			<channel typeId="observedAt" id="observedAt">
+				<label>Observed at</label>
+			</channel>
+			<channel typeId="provinceCode" id="provinceCode">
+				<label>Province Code</label>
+			</channel>
+			<channel typeId="climateId" id="climateId">
+				<label></label>
+			</channel>
+			<channel typeId="tcid" id="tcid"/>
+			<channel typeId="timeStamp" id="timeStamp"/>
+			<channel typeId="timeStampText" id="timeStampText">
+				<label>Time of Observation</label>
+			</channel>
+			<channel typeId="iconCode" id="iconCode">
+				<label>Icon Code</label>
+			</channel>
+			<channel typeId="condition" id="condition">
+				<label>Current Condition</label>
+			</channel>
+			<channel typeId="system.outdoor-temperature" id="temperature"/>
+			<channel typeId="system.outdoor-temperature" id="dewpointTemperature"/>
+			<channel typeId="system.outdoor-temperature" id="feelsLikeTemperature"/>
+			<channel typeId="system.barometric-pressure" id="pressure"/>
+			<channel typeId="pressureChange" id="pressureChange"/>
+			<channel typeId="pressureChangeDirection" id="pressureChangeDirection"/>
+			<channel typeId="system.wind-speed" id="windSpeed"/>
+			<channel typeId="system.wind-speed" id="windGust"/>
+			<channel typeId="windDirection" id="windDirection"/>
+			<channel typeId="system.wind-direction" id="windBearing"/>
+			<channel typeId="visibility" id="visibility"/>
+			<channel typeId="system.atmospheric-humidity" id="humidity"/>
+		</channels>
+
+		<config-description-ref uri="thing-type:gcweather:weather"/>
+	</thing-type>
+
+
+
+	<!-- Sample Channel Type -->
+	<!-- <channel-type id="sample-channel">
+		<item-type>Number:Temperature</item-type>
+		<label>Example Temperature</label>Use uppercase words, except prepositions. 2-3 words, max 25 chars
+		<description>Sample channel for GCWeather Binding</description>
+		</channel-type> -->
+</thing:thing-descriptions>
