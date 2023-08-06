@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.audioauthority3.internal;
 
-import static org.openhab.binding.audioauthority3.internal.AudioAuthority3BindingConstants.*;
+import static org.openhab.binding.audioauthority3.internal.AudioAuthority3BindingConstants.CHANNEL_1;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -40,6 +40,7 @@ public class AudioAuthority3Handler extends BaseThingHandler {
 
     public AudioAuthority3Handler(Thing thing) {
         super(thing);
+        logger.debug("AudioAuthority3 Thing in Handler");
     }
 
     @Override
@@ -62,6 +63,8 @@ public class AudioAuthority3Handler extends BaseThingHandler {
     public void initialize() {
         config = getConfigAs(AudioAuthority3Configuration.class);
 
+        logger.debug("Initializing AudioAuthority Thing in Handler.");
+        logger.debug("Config item 'hostname' is {}", config.hostname);
         // TODO: Initialize the handler.
         // The framework requires you to return from this method quickly, i.e. any network access must be done in
         // the background initialization below.
