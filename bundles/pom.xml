@@ -148,6 +148,7 @@
     <module>org.openhab.binding.fsinternetradio</module>
     <module>org.openhab.binding.ftpupload</module>
     <module>org.openhab.binding.gardena</module>
+    <module>org.openhab.binding.gcweather</module>
     <module>org.openhab.binding.gce</module>
     <module>org.openhab.binding.generacmobilelink</module>
     <module>org.openhab.binding.goecharger</module>
