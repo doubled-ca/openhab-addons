@@ -23,7 +23,7 @@ public class GCWeatherDTO {
      * An array of length 1 of observations that represent the
      * most recent PWS observations
      */
-    public GCWeather[] gc_weather;
+    public GCWeather[] gcWeather;
 
     public class GCWeather {
 

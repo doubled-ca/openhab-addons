@@ -113,7 +113,6 @@ public class GCWeatherHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-
         logger.debug("Initializing observations handler with configuration: {}",
                 getConfigAs(GCWeatherConfiguration.class).toString());
 
@@ -281,7 +280,6 @@ public class GCWeatherHandler extends BaseThingHandler {
      * Build the URL for requesting the PWS current observations
      */
     private @Nullable String buildGCWeatherUrl() {
-
         GCWeatherConfiguration config = getConfigAs(GCWeatherConfiguration.class);
 
         String location = config.cgndbLocation;
@@ -298,7 +296,6 @@ public class GCWeatherHandler extends BaseThingHandler {
     }
 
     private synchronized void refreshGCWeatherObservations() {
-
         logger.debug("Handler: Requesting GC Weather observations from The Weather Company API");
         String response = executeApiRequest(buildGCWeatherUrl());
         if (response == null) {
@@ -306,10 +303,10 @@ public class GCWeatherHandler extends BaseThingHandler {
         }
         try {
             logger.debug("Handler: Parsing GC Weather observations response: {}", response);
-            GCWeatherDTO gc_weatherObservations = Objects.requireNonNull(gson.fromJson(response, GCWeatherDTO.class));
+            GCWeatherDTO gcWeatherObservations = Objects.requireNonNull(gson.fromJson(response, GCWeatherDTO.class));
             logger.debug("Handler: Successfully parsed GC Weather observations response object");
             updateStatus(ThingStatus.ONLINE);
-            updateGCWeatherObservations(gc_weatherObservations);
+            updateGCWeatherObservations(gcWeatherObservations);
         } catch (JsonSyntaxException e) {
             logger.debug("Handler: Error parsing GC Weather observations response object: {}", e.getMessage(), e);
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
@@ -318,12 +315,12 @@ public class GCWeatherHandler extends BaseThingHandler {
         }
     }
 
-    private void updateGCWeatherObservations(GCWeatherDTO gc_weatherObservations) {
-        if (gc_weatherObservations.gc_weather.length == 0) {
+    private void updateGCWeatherObservations(GCWeatherDTO gcWeatherObservations) {
+        if (gcWeatherObservations.gcWeather.length == 0) {
             logger.debug("Handler: GC Weather observation object contains no observations!");
             return;
         }
-        GCWeather obs = gc_weatherObservations.gc_weather[0];
+        GCWeather obs = gcWeatherObservations.gcWeather[0];
         logger.debug("Handler: Processing observations from station {} at {}", obs.observation.observedAt,
                 obs.observation.timeStampText);
         // updateChannel(CH_PWS_TEMP, undefOrQuantity(obs.imperial.temp, ImperialUnits.FAHRENHEIT));
