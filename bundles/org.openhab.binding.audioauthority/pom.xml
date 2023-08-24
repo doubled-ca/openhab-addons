@@ -10,8 +10,8 @@
     <version>4.0.2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.openhab.binding.audioauthority3</artifactId>
+  <artifactId>org.openhab.binding.audioauthority</artifactId>
 
-  <name>openHAB Add-ons :: Bundles :: AudioAuthority3 Binding</name>
+  <name>openHAB Add-ons :: Bundles :: Audioauthority Binding</name>
 
 </project>
