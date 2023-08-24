@@ -115,8 +115,6 @@
     
     <module>org.openhab.binding.audioauthority</module>
         
-    <module>org.openhab.binding.audioauthority3</module>
-        
     <module>org.openhab.binding.autelis</module>
         
     <module>org.openhab.binding.automower</module>
